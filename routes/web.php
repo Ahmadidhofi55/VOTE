@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CalonController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -35,9 +36,16 @@ Route::get('/dashboard', function() {
 
 
 //user
+Route::get('/user',[UsersController::class,'index'])->name('user.index');
+
+Route::get('/calon', [CalonController::class, 'index'])->name('calon.index');
 
 
-Route::get('/calon', [UsersController::class, 'index'])->name('calon.index');
 
-
-Route::resource('/kelas', KelasController::class);
+//kelas
+Route::get('/kelas',[KelasController::class,'index'])->name('kelas.index');
+Route::get('/kelas/read',[KelasController::class,'read'])->name('kelas.read');
+Route::get('/kelas/show/{id}',[KelasController::class,'show'])->name('kelas.show');
+Route::post('/kelas/store',[KelasController::class,'store'])->name('kelas.store');
+Route::put('/kelas/update/{id}',[KelasController::class,'update'])->name('kelas.update');
+Route::delete('/kelas/delete/{id}',[KelasController::class,'destroy'])->name('kelas.destroy');

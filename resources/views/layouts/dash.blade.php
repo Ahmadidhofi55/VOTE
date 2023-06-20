@@ -71,7 +71,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('kelas.index') }}">
+                <a class="nav-link" href="/kelas/read">
                     <i class="fas fa-user-cog"></i>
                     <span>DATA KELAS</span></a>
             </li>
@@ -84,7 +84,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('user.index') }}">
+                <a class="nav-link" href="">
                     <i class="fas fa-user"></i>
                     <span>USER</span></a>
             </li>

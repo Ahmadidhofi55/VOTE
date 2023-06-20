@@ -11,19 +11,22 @@ class KelasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $kelas = kelas::paginate();
-        return view('kelas.index', compact('kelas'));
+        $data = kelas::all();
+
+        return response()->json($data);
+    }
+
+    public function read()
+    {
+        return view('kelas.index');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -32,7 +35,7 @@ class KelasController extends Controller
     {
         //define validation rules
         $validator = Validator::make($request->all(), [
-            'kelas'     => 'required',
+            'kelas'     => 'required|unique:kelas,kelas,except,kelas',
         ]);
 
         //check if validation fails
@@ -57,32 +60,52 @@ class KelasController extends Controller
     /**
      * Display the specified resource.
      */
-    function show(kelas $kelas)
+    public function show($id)
     {
-        //
+        $kelas = kelas::find($id);
+
+        return response()->json($kelas);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    function edit(kelas $kelas)
+    function update(Request $request, kelas $kelas)
     {
-        //
+        //define validation rules
+        $validator = Validator::make($request->all(), [
+            'kelas'     => 'required|unique:kelas,kelas,except,kelas',]);
+                    //check if validation fails
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        //create post
+        $kelas->update([
+            'kelas'     => $request->kelas,
+        ]);
+
+        //return response
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Berhasil Diupdate!',
+            'data'    => $kelas
+        ]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    function update(Request $request, kelas $kelas)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
      */
-    function destroy(kelas $kelas)
+    function destroy($id)
     {
-        //
+        $data = Kelas::findOrFail($id);
+        $data->delete();
+
+        return response()->json(['message' => 'Data deleted successfull']);
     }
 }

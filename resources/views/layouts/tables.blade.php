@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Vote-Sistem | @yield('title')</title>
 
     <!-- Custom fonts for this template -->
@@ -74,7 +74,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('kelas.index') }}">
+                <a class="nav-link" href="/kelas/read">
                     <i class="fas fa-user-cog"></i>
                     <span>DATA KELAS</span></a>
             </li>
