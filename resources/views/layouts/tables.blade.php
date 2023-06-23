@@ -12,10 +12,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Vote-Sistem | @yield('title')</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts and icon for this template -->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        href="/font/font.css"
         rel="stylesheet">
 
     <!-- Custom styles for this template -->
@@ -253,7 +253,7 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="/js/jquery-3.7.0.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->

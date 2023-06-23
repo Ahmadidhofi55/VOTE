@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="/js/jquery-3.7.0.min.js"></script>
     <script type="text/javascript">
         // Fungsi untuk mengambil data menggunakan AJAX
         function getData() {
@@ -40,8 +40,9 @@
                         rows += '<td>' + data.kelas + '</td>';
                         rows += '<td class="text-center">';
                         rows +=
-                            '<a href="javascript:void(0)" class="btn btn-info btn-sm mr-2 btn-show-post" data-id="'+ data.id +'"><i class="fas fa-eye"></i></a>';
-                        rows += '<a href="javascript:void(0)" id="btn-edit-post" data-id="' + data.id +
+                            '<a href="javascript:void(0)" id="btn-edit-post" data-id="' + data.id +
+                            '"  class="btn btn-info btn-sm mr-2"><i class="fas fa-eye"></i></a>';
+                        rows += '<a href="javascript:void(0)" id="btn-edit-post2" data-id="' + data.id +
                             '"  class="btn btn-primary btn-sm mr-2"><i class="fas fa-edit"></i></a>';
                         rows += '<a href="javascript:void(0)" onclick="deleteData(' + data.id +
                             ')" class="btn btn-danger btn-sm mr-2"><i class=" fas fa-trash"></i></a>';
@@ -85,7 +86,8 @@
                             Swal.fire({
                                 title: 'Sukses',
                                 text: response.message,
-                                icon: 'success'
+                                icon: 'success',
+                                timer: 2000
                             });
                             getData(); // Mengambil data terbaru setelah menghapus
                         }
@@ -129,7 +131,7 @@
                         icon: 'success',
                         title: response.message,
                         showConfirmButton: false,
-                        timer: 3000
+                        timer: 2000
                     });
 
                     // Clear form
@@ -203,7 +205,7 @@
                         icon: 'success',
                         title: `${response.message}`,
                         showConfirmButton: false,
-                        timer: 3000
+                        timer: 2000
                     });
 
                     // Close modal
@@ -239,35 +241,113 @@
         });
 
         $(document).ready(function() {
-        // Menyembunyikan modal saat halaman dimuat
-        $('#modalShowPost').modal('hide');
+            // Menyembunyikan modal saat halaman dimuat
+            $('#modalShowPost').modal('hide');
 
-        // Menangani klik tombol "btn-show-post"
-        $(document).on('click', '.btn-show-post', function(e) {
-            var kelasid = $(this).data('id');
+            // Menangani klik tombol "btn-show-post"
+            $(document).on('click', '.btn-show-post', function(e) {
+                var kelasid = $(this).data('id');
 
-            // Mengirim permintaan Ajax untuk mendapatkan data detail posting berdasarkan ID
-            $.ajax({
-                url: '/kelas/show/' + kelasid,
-                type: 'GET',
-                data: {
-                    id: kelasid
-                },
-                success: function(response) {
-                    // Memperbarui konten modal dengan detail posting yang diterima dari server
-                    $('#kelas').val(response.kelas);
+                // Mengirim permintaan Ajax untuk mendapatkan data detail posting berdasarkan ID
+                $.ajax({
+                    url: '/kelas/show/' + kelasid,
+                    type: 'GET',
+                    data: {
+                        id: kelasid
+                    },
+                    success: function(response) {
+                        // Memperbarui konten modal dengan detail posting yang diterima dari server
+                        $('#kelas').val(response.kelas);
 
-                    // Menampilkan modal
-                    $('#modalShowPost').modal('show');
-                },
-                error: function(xhr, status, error) {
-                    // Menangani kesalahan jika permintaan Ajax gagal
-                    console.log(error);
-                }
+                        // Menampilkan modal
+                        $('#modalShowPost').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        // Menangani kesalahan jika permintaan Ajax gagal
+                        console.log(error);
+                    }
+                });
             });
         });
-    });
+
+        //edit kelas
+        //button create post event
+
+        $(document).ready(function() {
+            // ...
+            $('body').on('click', '#btn-edit-post2', function() {
+                let kelas_id = $(this).data('id');
+
+                // Fetch detail post with ajax
+                $.ajax({
+                    url: `/kelas/show/${kelas_id}`,
+                    type: "GET",
+                    cache: false,
+                    success: function(response) {
+                        // Fill data to form
+                        $('#kelas_id2').val(response.id);
+                        $('#kelas-edit2').val(response.kelas);
+
+                        // Open modal
+                        $('#modal-edit2').modal('show');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Handle error case
+                        console.log("Terjadi kesalahan dalam permintaan Ajax:", textStatus,
+                            errorThrown);
+                    }
+                });
+            });
+
+            // Action update post
+            $('#update2').click(function(e) {
+                e.preventDefault();
+
+                // Define variables
+                let kelas_id = $('#kelas_id2').val();
+                let kelas = $('#kelas-edit2').val();
+                let token = $("meta[name='csrf-token']").attr("content");
+
+                // Ajax
+                $.ajax({
+                    url: `/kelas/update/${kelas_id}`,
+                    type: "PUT",
+                    cache: false,
+                    data: {
+                        "kelas": kelas,
+                        "_token": token,
+                    },
+                    success: function(response) {
+                        // Show success message
+                        Swal.fire({
+                            type: 'success',
+                            icon: 'success',
+                            title: `${response.message}`,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+
+                        // Close modal
+                        $('#modal-edit2').modal('hide');
+
+                        // Fetch updated data and update the displayed data
+                       getData();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.kelas && error.responseJSON.kelas[0]) {
+                            // Show alert
+                            $('#alert-kelas-edit2').removeClass('d-none');
+                            $('#alert-kelas-edit2').addClass('d-block');
+
+                            // Add message to alert
+                            $('#alert-kelas-edit2').html(error.responseJSON.kelas[0]);
+                        }
+                    }
+                });
+            });
+        });
     </script>
     @extends('kelas.create')
+    @extends('kelas.edit')
     @extends('kelas.show')
 @endsection

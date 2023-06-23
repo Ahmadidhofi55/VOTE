@@ -70,29 +70,43 @@ class KelasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    function update(Request $request, kelas $kelas)
+    public function update(Request $request, $id)
     {
-        //define validation rules
+        // Find the kelas by ID
+        $kelas = kelas::find($id);
+
+        // Check if the kelas exists
+        if (!$kelas) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kelas not found'
+            ], 404);
+        }
+
+        // Define validation rules
         $validator = Validator::make($request->all(), [
-            'kelas'     => 'required|unique:kelas,kelas,except,kelas',]);
-                    //check if validation fails
+            'kelas' => 'required|unique:kelas,kelas,' . $kelas->id,
+        ]);
+
+        // Check if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        //create post
-        $kelas->update([
-            'kelas'     => $request->kelas,
-        ]);
+        // Update the kelas
+        $kelas->kelas = $request->kelas;
+        $kelas->save();
 
-        //return response
+        // Return response
         return response()->json([
             'success' => true,
             'message' => 'Data Berhasil Diupdate!',
             'data'    => $kelas
         ]);
-
     }
+
+
+
 
     /**
      * Update the specified resource in storage.
