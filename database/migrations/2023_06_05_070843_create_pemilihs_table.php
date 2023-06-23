@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('kelas_id')->references('id')->on('kelas')->onUpdate('cascade')->onDelete('restrict');
             $table->unsignedBigInteger('jurusan_id');
             $table->foreign('jurusan_id')->references('id')->on('jurusans')->onUpdate('cascade')->onDelete('restrict');
+            $table->string('token','10');
             $table->date('data_tahun');
             $table->timestamps();
         });
