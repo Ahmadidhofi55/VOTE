@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('kelas_id');
             $table->foreign('kelas_id')->references('id')->on('kelas')->onUpdate('cascade')->onDelete('restrict');
             $table->unsignedBigInteger('jurusans_id');
-            $table->foreign('jurusans_id')->references('id')->on('jurusans')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('jurusans_id')->references('id')->on('jurusan')->onUpdate('cascade')->onDelete('restrict');
             $table->text('visi');
             $table->text('misi');
             $table->date('data_tahun');

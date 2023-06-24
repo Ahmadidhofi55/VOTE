@@ -7,16 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="shortcut icon" href="/vote.svg" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Vote-Sistem | @yield('title')</title>
 
     <!-- Custom fonts and icon for this template -->
+    <link rel="stylesheet" href="/css/sweetalert2.min.css">
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="/font/font.css"
-        rel="stylesheet">
+    <link href="/font/font.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
@@ -27,14 +24,14 @@
 </head>
 
 <body id="page-top">
-     <!-- Page Wrapper -->
-     <div id="wrapper">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-poll-h"></i>
                 </div>
@@ -74,20 +71,20 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" href="/kelas/read">
+                <a class="nav-link" href="{{ route('kelas.read') }}">
                     <i class="fas fa-user-cog"></i>
                     <span>DATA KELAS</span></a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="{{ route('jurusan.read') }}">
                     <i class="fas fa-user-tag"></i>
                     <span>DATA JURUSAN</span></a>
             </li>
 
 
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ route('user.read') }}">
                     <i class="fas fa-user"></i>
                     <span>USER</span></a>
             </li>
@@ -122,8 +119,8 @@
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="text" class="form-control bg-light border-0 small"
+                                placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button">
                                     <i class="fas fa-search fa-sm"></i>
@@ -166,8 +163,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -185,7 +181,8 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -203,7 +200,7 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">@yield('table')</h1>
                     <!-- DataTales Example -->
-                   @yield('contend')
+                    @yield('contend')
 
                 </div>
                 <!-- /.container-fluid -->
@@ -253,6 +250,7 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
+    <script src="/js/sweetalert2.min.js"></script>
     <script src="/js/jquery-3.7.0.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 

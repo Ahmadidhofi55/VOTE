@@ -13,7 +13,7 @@
                         <tr>
                             <th>No.</th>
                             <th>Kelas</th>
-                            <th>Aksi</th>
+                            <th class=" text-center">Aksi</th>
                         </tr>
                     <tbody id="datalist" class="table">
 

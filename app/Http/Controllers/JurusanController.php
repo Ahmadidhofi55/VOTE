@@ -2,31 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\users;
+use App\Models\jurusan;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreusersRequest;
-use App\Http\Requests\UpdateusersRequest;
 use Illuminate\Support\Facades\Validator;
 
-class UsersController extends Controller
+class JurusanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = users::all();
+        $data = jurusan::all();
 
         return response()->json($data);
     }
 
+    public function read()
+    {
+        return view('jurusan.index');
+    }
     /**
      * Show the form for creating a new resource.
      */
-    public function read()
-    {
-        return view('user.index');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,7 +33,7 @@ class UsersController extends Controller
     {
          //define validation rules
          $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:name,name,except,users',
+            'jurusan' => 'required|unique:jurusan,jurusan,except,jurusan',
         ]);
 
         //check if validation fails
@@ -44,18 +42,15 @@ class UsersController extends Controller
         }
 
         //create post
-        $users = users::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'img' => $request->img,
-            'password' => $request->password,
+        $jurusan = jurusan::create([
+            'jurusan' => $request->jurusan,
         ]);
 
         //return response
         return response()->json([
             'success' => true,
-            'message' => 'Data Berhasil Disimpan!',
-            'data'    => $users
+            'message' => 'Jurusan Berhasil Disimpan!',
+            'data'    => $jurusan
         ]);
     }
 
@@ -64,9 +59,9 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        $users = users::find($id);
+        $jurusan = jurusan::find($id);
 
-        return response()->json($users);
+        return response()->json($jurusan);
     }
 
     /**
@@ -79,10 +74,10 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
          // Find the kelas by ID
-         $users = users::find($id);
+         $jurusan = jurusan::find($id);
 
          // Check if the kelas exists
-         if (!$users) {
+         if (!$jurusan) {
              return response()->json([
                  'success' => false,
                  'message' => 'Jurusan not found'
@@ -91,10 +86,7 @@ class UsersController extends Controller
 
          // Define validation rules
          $validator = Validator::make($request->all(), [
-             'name' => 'required|unique:name,name,' . $users->id,
-             'email' => 'required|unique:email,email,' . $users->id,
-             'img' => 'required|unique:img,img,' . $users->id,
-             'password' => 'required|min:6' . $users->id,
+             'jurusan' => 'required|unique:jurusan,jurusan,' . $jurusan->id,
          ]);
 
          // Check if validation fails
@@ -103,17 +95,14 @@ class UsersController extends Controller
          }
 
          // Update the kelas
-         $users->name = $request->name;
-         $users->email = $request->email;
-         $users->img = $request->img;
-         $users->password = $request->password;
-         $users->save();
+         $jurusan->jurusan = $request->jurusan;
+         $jurusan->save();
 
          // Return response
          return response()->json([
              'success' => true,
-             'message' => 'Data Berhasil Diupdate!',
-             'data'    => $users
+             'message' => 'Jurusan Berhasil Diupdate!',
+             'data'    => $jurusan
          ]);
     }
 
@@ -122,9 +111,9 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        $data = users::findOrFail($id);
+        $data = jurusan::findOrFail($id);
         $data->delete();
 
-        return response()->json(['message' => 'Users deleted successfull']);
+        return response()->json(['message' => 'Jurusan deleted successfull']);
     }
 }

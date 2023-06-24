@@ -51,7 +51,7 @@ class KelasController extends Controller
         //return response
         return response()->json([
             'success' => true,
-            'message' => 'Data Berhasil Disimpan!',
+            'message' => 'Kelas Berhasil Disimpan!',
             'data'    => $kelas
         ]);
     }
@@ -100,7 +100,7 @@ class KelasController extends Controller
         // Return response
         return response()->json([
             'success' => true,
-            'message' => 'Data Berhasil Diupdate!',
+            'message' => 'Kelas Berhasil Diupdate!',
             'data'    => $kelas
         ]);
     }
@@ -120,6 +120,6 @@ class KelasController extends Controller
         $data = Kelas::findOrFail($id);
         $data->delete();
 
-        return response()->json(['message' => 'Data deleted successfull']);
+        return response()->json(['message' => 'Kelas deleted successfull']);
     }
 }

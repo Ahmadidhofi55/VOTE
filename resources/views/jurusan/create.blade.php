@@ -6,7 +6,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">TAMBAH KELAS</h5>
+                <h5 class="modal-title" id="exampleModalLabel">TAMBAH JURUSAN</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,8 +14,8 @@
             <div class="modal-body">
 
                 <div class="form-group">
-                    <label for="name" class="control-label">Kelas</label>
-                    <input type="text" class="form-control" id="kelas" name="kelas">
+                    <label for="name" class="control-label">Jurusan</label>
+                    <input type="text" class="form-control" id="jurusan" name="jurusan">
                     <div class="alert alert-danger mt-2 d-none" role="alert" id="alert-kelas"></div>
                 </div>
 

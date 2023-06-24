@@ -1,6 +1,6 @@
 @extends('layouts.tables')
-@section('title', 'Users')
-@section('table', 'Users')
+@section('title', 'Jurusan')
+@section('table', 'Jurusan')
 @section('contend')
     <div class="card shadow mb-4">
         <div class="card-body">
@@ -12,10 +12,7 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>name</th>
-                            <th>email</th>
-                            <th>img</th>
-                            <th>password</th>
+                            <th>Jurusan</th>
                             <th class=" text-center">Aksi</th>
                         </tr>
                     <tbody id="datalist" class="table">
@@ -30,7 +27,7 @@
         // Fungsi untuk mengambil data menggunakan AJAX
         function getData() {
             $.ajax({
-                url: '/user',
+                url: '/jurusan',
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -40,10 +37,7 @@
                     $.each(response, function(index, data) {
                         rows += '<tr>';
                         rows += '<td>' + (index + 1) + ' .</td>';
-                        rows += '<td>' + data.name + '</td>';
-                        rows += '<td>' + data.email + '</td>';
-                        rows += '<td>' + data.img + '</td>';
-                        rows += '<td>' + data.password + '</td>';
+                        rows += '<td>' + data.jurusan + '</td>';
                         rows += '<td class="text-center">';
                         rows +=
                             '<a href="javascript:void(0)" id="btn-edit-post" data-id="' + data.id +
@@ -82,7 +76,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/user/delete/' + id,
+                        url: '/jurusan/delete/' + id,
                         type: 'DELETE',
                         dataType: 'json',
                         headers: {
@@ -118,22 +112,16 @@
             e.preventDefault();
 
             // Define variables
-            let name = $('#name').val();
-            let email = $('#email').val();
-            let img = $('#img').val();
-            let password = $('#password').val();
+            let jurusan = $('#jurusan').val();
             let token = $('meta[name="csrf-token"]').attr('content');
 
             // AJAX
             $.ajax({
-                url: '/user/store',
+                url: '/jurusan/store',
                 type: 'POST',
                 cache: false,
                 data: {
-                    'name': name,
-                    'email': email,
-                    'img':img,
-                    'password':password,
+                    'jurusan': jurusan,
                     '_token': token
                 },
                 success: function(response) {
@@ -147,10 +135,7 @@
                     });
 
                     // Clear form
-                    $('#name').val('');
-                    $('#email').val('');
-                    $('#img').val('');
-                    $('#password').val('');
+                    $('#jurusan').val('');
 
                     // Close modal
                     $('#modal-create').modal('hide');
@@ -158,13 +143,13 @@
                     getData(); // Mengambil data terbaru setelah memasukkan data baru
                 },
                 error: function(error) {
-                    if (error.responseJSON.user && error.responseJSON.user[0]) {
+                    if (error.responseJSON.jurusan && error.responseJSON.jurusan[0]) {
                         // Show alert
-                        $('#alert-user').removeClass('d-none');
-                        $('#alert-user').addClass('d-block');
+                        $('#alert-jurusan').removeClass('d-none');
+                        $('#alert-jurusan').addClass('d-block');
 
                         // Add message to alert
-                        $('#alert-user').html(error.responseJSON.user[0]);
+                        $('#alert-jurusan').html(error.responseJSON.jurusan[0]);
                     }
                 }
             });
@@ -173,21 +158,17 @@
         //edit and update
         //button create post event
         $('body').on('click', '#btn-edit-post', function() {
-            let user_id = $(this).data('id');
+            let jurusan_id = $(this).data('id');
 
             // Fetch detail post with ajax
             $.ajax({
-                url: `/user/show/${user_id}`,
+                url: `/jurusan/show/${jurusan_id}`,
                 type: "GET",
                 cache: false,
                 success: function(response) {
                     // Fill data to form
-                    $('#user_id').val(response.id);
-                    $('#name-edit').val(response.name);
-                    $('#email-edit').val(response.email);
-                    $('#img-edit').val(response.img);
-                    $('#password-edit').val(response.password);
-
+                    $('#jurusan_id').val(response.id);
+                    $('#jurusan-edit').val(response.jurusan);
 
                     // Open modal
                     $('#modal-edit').modal('show');
@@ -204,23 +185,17 @@
             e.preventDefault();
 
             // Define variables
-            let user_id = $('#user_id').val();
-            let name = $('#name-edit').val();
-            let email = $('#email-edit').val();
-            let img = $('#img-edit').val();
-            let password = $('#password-edit').val();
+            let jurusan_id = $('#jurusan_id').val();
+            let jurusan = $('#jurusan-edit').val();
             let token = $("meta[name='csrf-token']").attr("content");
 
             // Ajax
             $.ajax({
-                url: `/user/update/${user_id}`,
+                url: `/jurusan/update/${jurusan_id}`,
                 type: "PUT",
                 cache: false,
                 data: {
-                    "name": name,
-                    "email": email,
-                    "img": img,
-                    "password":password,
+                    "jurusan": jurusan,
                     "_token": token,
                 },
                 success: function(response) {
@@ -238,15 +213,12 @@
 
                     // Fetch updated data and update the displayed data
                     $.ajax({
-                        url: `/user/show/${user_id}`,
+                        url: `/jurusan/show/${jurusan_id}`,
                         type: "GET",
                         cache: false,
                         success: function(response) {
                             // Update the displayed data
-                            $('#name-display').text(response.name);
-                            $('#email-display').text(response.email);
-                            $('#img-display').text(response.img);
-                            $('#password-display').text(response.password);
+                            $('#jurusan-display').text(response.jurusan);
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             // Handle error case
@@ -256,13 +228,13 @@
                     });
                 },
                 error: function(error) {
-                    if (error.responseJSON.user[0]) {
+                    if (error.responseJSON.jurusan[0]) {
                         // Show alert
-                        $('#alert-user-edit').removeClass('d-none');
-                        $('#alert-user-edit').addClass('d-block');
+                        $('#alert-jurusan-edit').removeClass('d-none');
+                        $('#alert-jurusan-edit').addClass('d-block');
 
                         // Add message to alert
-                        $('#alert-user-edit').html(error.responseJSON.user[0]);
+                        $('#alert-jurusan-edit').html(error.responseJSON.jurusan[0]);
                     }
                 }
             });
@@ -274,21 +246,18 @@
 
             // Menangani klik tombol "btn-show-post"
             $(document).on('click', '.btn-show-post', function(e) {
-                var userid = $(this).data('id');
+                var jurusanid = $(this).data('id');
 
                 // Mengirim permintaan Ajax untuk mendapatkan data detail posting berdasarkan ID
                 $.ajax({
-                    url: '/user/show/' + userid,
+                    url: '/jurusan/show/' + jurusanid,
                     type: 'GET',
                     data: {
-                        id: userid
+                        id: jurusanid
                     },
                     success: function(response) {
                         // Memperbarui konten modal dengan detail posting yang diterima dari server
-                        $('#name').val(response.name);
-                        $('#email').val(response.email);
-                        $('#img').val(response.img);
-                        $('#password').val(response.password);
+                        $('#jurusan').val(response.jurusan);
 
                         // Menampilkan modal
                         $('#modalShowPost').modal('show');
@@ -307,20 +276,17 @@
         $(document).ready(function() {
             // ...
             $('body').on('click', '#btn-edit-post2', function() {
-                let user_id = $(this).data('id');
+                let jurusan_id = $(this).data('id');
 
                 // Fetch detail post with ajax
                 $.ajax({
-                    url: `/user/show/${user_id}`,
+                    url: `/jurusan/show/${jurusan_id}`,
                     type: "GET",
                     cache: false,
                     success: function(response) {
                         // Fill data to form
-                        $('#user_id2').val(response.id);
-                        $('#name-edit2').val(response.name);
-                        $('#email-edit2').val(response.email);
-                        $('#img-edit2').val(response.img);
-                        $('#password-edit2').val(response.password)
+                        $('#jurusan_id2').val(response.id);
+                        $('#jurusan-edit2').val(response.jurusan);
 
                         // Open modal
                         $('#modal-edit2').modal('show');
@@ -338,23 +304,17 @@
                 e.preventDefault();
 
                 // Define variables
-                let user_id = $('#user_id2').val();
-                let name = $('#name-edit2').val();
-                let email = $('#email-edit2').val();
-                let img = $('#img-edit2').val();
-                let password = $('#password-edit2').val();
+                let jurusan_id = $('#jurusan_id2').val();
+                let jurusan = $('#jurusan-edit2').val();
                 let token = $("meta[name='csrf-token']").attr("content");
 
                 // Ajax
                 $.ajax({
-                    url: `/user/update/${user_id}`,
+                    url: `/jurusan/update/${jurusan_id}`,
                     type: "PUT",
                     cache: false,
                     data: {
-                        "name": name,
-                        'email': email,
-                        'img':img,
-                        'password':password,
+                        "jurusan": jurusan,
                         "_token": token,
                     },
                     success: function(response) {
@@ -374,20 +334,20 @@
                        getData();
                     },
                     error: function(error) {
-                        if (error.responseJSON.user && error.responseJSON.user[0]) {
+                        if (error.responseJSON.jurusan && error.responseJSON.jurusan[0]) {
                             // Show alert
-                            $('#alert-user-edit2').removeClass('d-none');
-                            $('#alert-user-edit2').addClass('d-block');
+                            $('#alert-jurusan-edit2').removeClass('d-none');
+                            $('#alert-jurusan-edit2').addClass('d-block');
 
                             // Add message to alert
-                            $('#alert-user-edit2').html(error.responseJSON.user[0]);
+                            $('#alert-jurusan-edit2').html(error.responseJSON.jurusan[0]);
                         }
                     }
                 });
             });
         });
     </script>
-    @extends('user.create')
-    @extends('user.edit')
-    @extends('user.show')
+    @extends('jurusan.create')
+    @extends('jurusan.edit')
+    @extends('jurusan.show')
 @endsection
