@@ -33,29 +33,41 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-         //define validation rules
-         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:name,name,except,users',
+        // define validation rules
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:users,name',
+            'email' => 'required|email|unique:users,email',
+            'img' => 'required|image|mimes:png,jpg,svg,jfif|max:200',
+            'password' => 'required|min:5',
         ]);
 
-        //check if validation fails
+        // check if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        //create post
-        $users = users::create([
+        // process the image
+        if ($request->hasFile('img')) {
+            $image = $request->file('img');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images'), $imageName);
+        } else {
+            $imageName = null;
+        }
+
+        // create user
+        $user = users::create([
             'name' => $request->name,
             'email' => $request->email,
-            'img' => $request->img,
-            'password' => $request->password,
+            'img' => $imageName,
+            'password' => bcrypt($request->password),
         ]);
 
-        //return response
+        // return response
         return response()->json([
             'success' => true,
             'message' => 'Data Berhasil Disimpan!',
-            'data'    => $users
+            'data' => $user
         ]);
     }
 
@@ -78,43 +90,50 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-         // Find the kelas by ID
-         $users = users::find($id);
+        // Find the user by ID
+        $user = users::find($id);
 
-         // Check if the kelas exists
-         if (!$users) {
-             return response()->json([
-                 'success' => false,
-                 'message' => 'Jurusan not found'
-             ], 404);
-         }
+        // Check if the user exists
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
 
-         // Define validation rules
-         $validator = Validator::make($request->all(), [
-             'name' => 'required|unique:name,name,' . $users->id,
-             'email' => 'required|unique:email,email,' . $users->id,
-             'img' => 'required|unique:img,img,' . $users->id,
-             'password' => 'required|min:6' . $users->id,
-         ]);
+        // Define validation rules
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:users,name,' . $user->id,
+            'email' => 'required|unique:users,email,' . $user->id,
+            'img' => 'image',
+            'password' => 'required|min:5',
+        ]);
 
-         // Check if validation fails
-         if ($validator->fails()) {
-             return response()->json($validator->errors(), 422);
-         }
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
-         // Update the kelas
-         $users->name = $request->name;
-         $users->email = $request->email;
-         $users->img = $request->img;
-         $users->password = $request->password;
-         $users->save();
+        // Process the image
+        if ($request->hasFile('img')) {
+            $image = $request->file('img');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images'), $imageName);
+            $user->img = $imageName;
+        }
 
-         // Return response
-         return response()->json([
-             'success' => true,
-             'message' => 'Data Berhasil Diupdate!',
-             'data'    => $users
-         ]);
+        // Update the user
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        // Return response
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Berhasil Diupdate!',
+            'data' => $user
+        ]);
     }
 
     /**
@@ -122,9 +141,18 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        $data = users::findOrFail($id);
-        $data->delete();
+        $user = users::findOrFail($id);
 
-        return response()->json(['message' => 'Users deleted successfull']);
+        // Delete the associated image if it exists
+        if ($user->img) {
+            $imagePath = public_path('images') . '/' . $user->img;
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully']);
     }
 }

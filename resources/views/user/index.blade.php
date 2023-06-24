@@ -107,13 +107,11 @@
             getData();
         });
 
-        // Button create post event
         $('body').on('click', '#btn-create-post', function() {
             // Open modal
             $('#modal-create').modal('show');
         });
-
-        // Action create post
+        // Button create post event
         $(document).on('click', '#store', function(e) {
             e.preventDefault();
 
@@ -129,11 +127,12 @@
                 url: '/user/store',
                 type: 'POST',
                 cache: false,
+                enctype: 'multipart/form-data',
                 data: {
                     'name': name,
                     'email': email,
-                    'img':img,
-                    'password':password,
+                    'img': img,
+                    'password': password,
                     '_token': token
                 },
                 success: function(response) {
@@ -170,7 +169,8 @@
             });
         });
 
-        //edit and update
+
+        //view and update
         //button create post event
         $('body').on('click', '#btn-edit-post', function() {
             let user_id = $(this).data('id');
@@ -220,7 +220,7 @@
                     "name": name,
                     "email": email,
                     "img": img,
-                    "password":password,
+                    "password": password,
                     "_token": token,
                 },
                 success: function(response) {
@@ -353,8 +353,8 @@
                     data: {
                         "name": name,
                         'email': email,
-                        'img':img,
-                        'password':password,
+                        'img': img,
+                        'password': password,
                         "_token": token,
                     },
                     success: function(response) {
@@ -371,7 +371,7 @@
                         $('#modal-edit2').modal('hide');
 
                         // Fetch updated data and update the displayed data
-                       getData();
+                        getData();
                     },
                     error: function(error) {
                         if (error.responseJSON.user && error.responseJSON.user[0]) {
